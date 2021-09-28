@@ -1,0 +1,12 @@
+spring:
+  data:
+    mongodb:
+      port: 28017
+      host: localhost
+      database: webfluxtest
+logging:
+  level:
+    ROOT: debug
+
+pokeapi:
+  pokemon: https://pokeapi.co/api/v2/pokemon/
