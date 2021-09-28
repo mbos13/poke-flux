@@ -46,10 +46,6 @@ public class TrainerController {
 
     @PutMapping("/trainer/{id}/pokemon/{name}")
     public Mono<?> catchPokemon(@PathVariable int id, @PathVariable String name) {
-        try {
-            return trainerService.catchPokemon(id, name);
-        } catch (Exception e) {
-            return Mono.just(e.getMessage());
-        }
+        return trainerService.catchPokemon(id, name);
     }
 }
