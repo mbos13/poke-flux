@@ -1,23 +1,32 @@
 package com.example.pokeflux.model;
 
+import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Document
+@Data
+@Table
 public class Trainer {
 
     @Id
-    int id;
-    String name;
-    String homeTown;
-    String region;
-    String gender;
-    List<String> pokemonsOnHand;
+    private int id;
 
-    public Trainer(int id, String name, String homeTown, String region, String gender, List<String> pokemonsOnHand) {
+    private String name;
+
+    private String homeTown;
+
+    private String region;
+
+    private String gender;
+
+    @Transient
+    List<Pokemon> pokemonsOnHand;
+
+    public Trainer(int id, String name, String homeTown, String region, String gender, List<Pokemon> pokemonsOnHand) {
         this.id = id;
         this.name = name;
         this.homeTown = homeTown;
@@ -70,11 +79,11 @@ public class Trainer {
         this.gender = gender;
     }
 
-    public List<String> getPokemonsOnHand() {
+    public List<Pokemon> getPokemonsOnHand() {
         return new ArrayList<>(pokemonsOnHand);
     }
 
-    public void setPokemonsOnHand(List<String> pokemonsOnHand) {
+    public void setPokemonsOnHand(List<Pokemon> pokemonsOnHand) {
         this.pokemonsOnHand = new ArrayList<>(pokemonsOnHand);
     }
 

@@ -1,12 +1,24 @@
 spring:
   data:
-    mongodb:
-      port: 28017
-      host: localhost
-      database: webfluxtest
+    r2dbc:
+      repositories:
+        enabled: true
+  r2dbc:
+    password: ${database.passwrod}
+    url: r2dbc:postgresql://${database.host}:${database.port}/${database.name}
+    username: ${database.username}
+
 logging:
   level:
     ROOT: debug
 
 pokeapi:
   pokemon: https://pokeapi.co/api/v2/pokemon/
+
+database:
+  name: postgres
+  passwrod: password
+  url:  r2dbc:postgresql://localhost:54320
+  username: postgres
+  host: 127.0.0.1
+  port: 54320

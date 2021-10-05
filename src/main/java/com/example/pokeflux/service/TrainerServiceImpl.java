@@ -1,6 +1,8 @@
 package com.example.pokeflux.service;
 
-import com.example.pokeflux.repository.ReactiveTrainerRepository;
+import com.example.pokeflux.model.Pokemon;
+import com.example.pokeflux.repository.PokemonRepository;
+import com.example.pokeflux.repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -8,23 +10,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 @Service
 public class TrainerServiceImpl implements TrainerService {
 
     @Value("${pokeapi.pokemon}")
     private String pokeApi;
 
-    ReactiveTrainerRepository reactiveTrainerRepository;
+    TrainerRepository trainerRepository;
+    PokemonRepository pokemonRepository;
 
     WebClient localApiClient;
 
     @Autowired
-    private TrainerServiceImpl(ReactiveTrainerRepository reactiveTrainerRepository,
-                               WebClient localApiClient) {
-        this.reactiveTrainerRepository = reactiveTrainerRepository;
+    private TrainerServiceImpl(TrainerRepository trainerRepository,
+                               WebClient localApiClient,
+                               PokemonRepository pokemonRepository) {
+        this.trainerRepository = trainerRepository;
         this.localApiClient = localApiClient;
+        this.pokemonRepository = pokemonRepository;
     }
 
     @Override
@@ -33,16 +36,14 @@ public class TrainerServiceImpl implements TrainerService {
                 .uri(pokeApi + "/" + pokemonName)
                 .exchangeToMono(clientResponse -> {
                     if (clientResponse.statusCode().equals(HttpStatus.OK)) {
-                        return reactiveTrainerRepository
-                                .findByPokemonsOnHand(pokemonName)
+                        return trainerRepository
+                                .findTrainerByPokemon(pokemonName)
                                 .flatMap(trainer -> Mono.error(new RuntimeException("Pokemon is already caught.")))
-                                .switchIfEmpty(reactiveTrainerRepository
+                                .switchIfEmpty(trainerRepository
                                         .findById(trainerId)
                                         .flatMap(newTrainer -> {
-                                            List<String> pokemons = newTrainer.getPokemonsOnHand();
-                                            pokemons.add(pokemonName);
-                                            newTrainer.setPokemonsOnHand(pokemons);
-                                            return reactiveTrainerRepository.save(newTrainer)
+                                            Pokemon newPokemon = new Pokemon(pokemonName, newTrainer.getId());
+                                            return pokemonRepository.save(newPokemon)
                                                     .flatMap(Mono::just);
                                         })
                                         .switchIfEmpty(Mono.error(new RuntimeException("Trainer doesnt exist.")))

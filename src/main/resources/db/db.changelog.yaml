@@ -1,0 +1,68 @@
+databaseChangeLog:
+
+  - changeSet:
+    id: 01-create-trainer-table
+    author: mbos
+    changes:
+      - changes:
+          schema: public
+          tableName: trainer
+          columns:
+            - column:
+                name: id
+                type: int
+                autoIncrement: true
+                startWith: 100
+                constraints:
+                  primaryKey: true
+                  nullable: false
+            - column:
+                name: name
+                type: varchar(4000)
+                constraints:
+                  nullable: false
+            - column:
+                name: home_town
+                type: varchar(4000)
+                constraints:
+                  nullable: false
+            - column:
+                name: region
+                type: varchar(4000)
+                constraints:
+                  nullable: false
+            - column:
+                name: gender
+                type: varchar(4000)
+                constraints:
+                  nullable: false
+  - changeSet:
+      id: 02-create-pokemon-table
+      author: mbos
+      changes:
+        - changes:
+            schema: public
+            tableName: pokemon
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  startWith: 100
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(4000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: triner_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_item_pokemon_id
+                    references: pokemon(id)
+
+
