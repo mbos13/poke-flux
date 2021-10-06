@@ -23,10 +23,9 @@ public class TrainerController {
     @Autowired
     TrainerService trainerService;
 
-    @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping
     public Flux<Trainer> getAll() {
-        return reactiveTrainerRepository.findAll()
-                .delayElements(Duration.ofMillis(DELAY_PER_ITEM_MS));
+        return reactiveTrainerRepository.findAll();
     }
 
     @GetMapping("/trainer/{id}")

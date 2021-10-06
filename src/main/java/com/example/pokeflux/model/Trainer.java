@@ -26,6 +26,14 @@ public class Trainer {
         this.pokemonsOnHand = pokemonsOnHand;
     }
 
+    public Trainer(String name, String homeTown, String region, String gender, List<String> pokemonsOnHand) {
+        this.name = name;
+        this.homeTown = homeTown;
+        this.region = region;
+        this.gender = gender;
+        this.pokemonsOnHand = pokemonsOnHand;
+    }
+
     public Trainer() {
         pokemonsOnHand = new ArrayList<>();
     }
