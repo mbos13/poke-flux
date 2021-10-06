@@ -22,9 +22,9 @@ public class TrainerController {
         this.reactiveTrainerRepository = reactiveTrainerRepository;
     }
 
-    @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping
     public Flux<Trainer> getAll() {
-        return reactiveTrainerRepository.findAll();
+        return reactiveTrainerRepository.findAllTrainers();
     }
 
     @GetMapping("/trainer/{id}")
